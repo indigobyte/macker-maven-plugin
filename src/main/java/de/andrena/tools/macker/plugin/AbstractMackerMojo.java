@@ -39,6 +39,7 @@ import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.*;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.resource.ResourceManager;
 import org.codehaus.plexus.resource.loader.FileResourceCreationException;
@@ -50,28 +51,27 @@ import org.codehaus.plexus.util.StringUtils;
 /**
  * Runs Macker against the compiled classes of the project.
  *
- * @requiresDependencyResolution compile
- * @requiresProject
  * @author <a href="http://www.codehaus.org/~wfay/">Wayne Fay</a>
  * @author <a href="http://people.apache.org/~bellingard/">Fabrice
  *         Bellingard</a>
  * @author <a href="http://www.code-cop.org/">Peter Kofler</a>
  */
+@Mojo(
+		name = "macker-abstract",
+		requiresDependencyResolution = ResolutionScope.COMPILE,
+		requiresProject = true
+)
 public abstract class AbstractMackerMojo extends AbstractMojo {
 	/**
 	 * Directory containing the class files for Macker to analyze.
-	 *
-	 * @parameter property="${project.build.outputDirectory}"
-	 * @required
 	 */
+	@Parameter(defaultValue = "${project.build.outputDirectory}", required = true)
 	protected File classesDirectory;
 
 	/**
 	 * The directories containing the test-classes to be analyzed.
-	 *
-	 * @parameter property="${project.build.testOutputDirectory}"
-	 * @required
 	 */
+	@Parameter(defaultValue = "${project.build.testOutputDirectory}", required = true)
 	protected File testClassesDirectory;
 
 	/**
@@ -81,172 +81,136 @@ public abstract class AbstractMackerMojo extends AbstractMojo {
 	 * words, files are excluded based on their package and/or class name. If
 	 * you want to exclude entire root directories, use the parameter
 	 * <code>excludeRoots</code> instead.
-	 *
-	 * @parameter
 	 */
+	@Parameter
 	protected String[] excludes;
 
 	/**
 	 * A list of files to include from checking. Can contain Ant-style wildcards
 	 * and double wildcards. Defaults to **\/*.class.
-	 *
-	 * @parameter
 	 */
+	@Parameter
 	protected String[] includes;
 
 	/**
 	 * Run Macker on the tests.
-	 *
-	 * @parameter default-value="false"
 	 */
+	@Parameter(defaultValue = "false")
 	protected boolean includeTests;
 
 	/**
 	 * Directory containing the rules files for Macker.
-	 *
-	 * @parameter property="${basedir}/src/main/config"
-	 * @required
 	 */
+	@Parameter(defaultValue = "${basedir}/src/main/config", required = true)
 	protected File rulesDirectory;
 
 	/**
 	 * Directory where the Macker output file will be generated.
-	 *
-	 * @parameter default-value="${project.build.directory}"
-	 * @required
 	 */
+	@Parameter(defaultValue = "${project.build.directory}", required = true)
 	protected File outputDirectory;
 
 	/**
 	 * Name of the Macker output file.
-	 *
-	 * @parameter property="${outputName}" default-value="macker-out.xml"
-	 * @required
 	 */
+	@Parameter(defaultValue = "macker-out.xml", required = true)
 	protected String outputName;
 
 	/**
 	 * Print max messages.
-	 *
-	 * @parameter property="${maxmsg}" default-value="0"
 	 */
+	@Parameter(defaultValue = "0")
 	protected int maxmsg;
 
 	/**
 	 * Print threshold. Valid options are error, warning, info, and debug.
-	 *
-	 * @parameter property="${print}"
 	 */
+	@Parameter
 	protected String print;
 
 	/**
 	 * Anger threshold. Valid options are error, warning, info, and debug.
-	 *
-	 * @parameter property="${anger}"
 	 */
+	@Parameter
 	protected String anger;
 
 	/**
 	 * Name of the Macker rules file.
-	 *
-	 * @parameter property="${rule}" default-value="macker-rules.xml"
 	 */
+	@Parameter(defaultValue = "macker-rules.xml")
 	protected String rule;
 
 	/**
 	 * Name of the Macker rules files.
-	 *
-	 * @parameter property="${rules}"
 	 */
+	@Parameter
 	protected String[] rules = new String[0];
 
-	/**
-	 * @component
-	 * @required
-	 * @readonly
-	 */
+	@Component
 	protected ResourceManager locator;
 
 	/**
 	 * Variables map that will be passed to Macker.
-	 *
-	 * @parameter property="${variables}"
 	 */
+	@Parameter
 	protected final Map<String, String> variables = new HashMap<String, String>();
 
 	/**
 	 * Verbose setting for Macker tool execution.
-	 *
-	 * @parameter property="${verbose}" default-value="false"
 	 */
+	@Parameter(defaultValue = "false")
 	protected boolean verbose;
 
 	/**
 	 * Fail the build on an error.
-	 *
-	 * @parameter default-value="true"
 	 */
+	@Parameter(defaultValue = "true")
 	protected boolean failOnError;
 
 	/**
 	 * Skip the checks. Most useful on the command line via
 	 * "-Dmacker.skip=true".
-	 *
-	 * @parameter property="${macker.skip}" default-value="false"
 	 */
+	@Parameter(property = "macker.skip", defaultValue = "false")
 	protected boolean skip;
 
 	/**
 	 * <i>Maven Internal</i>: Project to interact with.
-	 *
-	 * @parameter property="${project}"
-	 * @required
-	 * @readonly
 	 */
+	@Parameter(defaultValue = "${project}", required = true, readonly = true)
 	protected MavenProject project;
 
 	/**
 	 * Maximum memory to pass JVM of Macker processes.
-	 *
-	 * @parameter property="${macker.maxmem}" default-value="64m"
 	 */
+	@Parameter(property = "macker.maxmem", defaultValue = "64m")
 	protected String maxmem;
 
 	/**
-	 * <i>Maven Internal</i>: List of artifacts for the plugin.
-	 *
-	 * @parameter property="${plugin.artifacts}"
-	 * @required
-	 * @readonly
+	 * Maximum memory to pass JVM of Macker processes.
 	 */
+	@Parameter(property = "macker.debugPort", defaultValue = "0")
+	protected int debugPort;
+
+	/**
+	 * <i>Maven Internal</i>: List of artifacts for the plugin.
+	 */
+	@Parameter(defaultValue = "${plugin.artifacts}", required = true, readonly = true)
 	protected List<Artifact> pluginClasspathList;
 
 	/**
 	 * Only output Macker errors, avoid info messages.
-	 *
-	 * @parameter property="${quiet}" default-value="false"
 	 */
+	@Parameter(defaultValue = "false")
 	protected boolean quiet;
 
-	/**
-	 * @parameter default-value="${localRepository}"
-	 * @required
-	 * @readonly
-	 */
+	@Parameter(defaultValue = "${localRepository}", required = true, readonly = true)
 	protected ArtifactRepository localRepository;
 
-	/**
-	 * @parameter default-value="${project.remoteArtifactRepositories}"
-	 * @required
-	 * @readonly
-	 */
+	@Parameter(defaultValue = "${project.remoteArtifactRepositories}", required = true, readonly = true)
 	protected List<ArtifactRepository> remoteRepositories;
 
-	/**
-	 * @component
-	 * @required
-	 * @readonly
-	 */
+	@Component
 	protected ArtifactResolver resolver;
 
 	/**
@@ -338,6 +302,7 @@ public abstract class AbstractMackerMojo extends AbstractMojo {
 		Macker macker = createMackerImplementation();
 		macker.setLog(getLog());
 		macker.setMaxmem(maxmem);
+		macker.setDebugPort(debugPort);
 		macker.setPluginClasspathList(collectArtifactList());
 		macker.setQuiet(quiet);
 
@@ -559,6 +524,7 @@ public abstract class AbstractMackerMojo extends AbstractMojo {
 		final List<Artifact> classpath = new ArrayList<Artifact>();
 		classpath.add(myself);
 		classpath.addAll(pluginClasspathList);
+		classpath.addAll(getProject().getArtifacts());
 		return classpath;
 	}
 

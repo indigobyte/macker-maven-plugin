@@ -20,18 +20,24 @@ package de.andrena.tools.macker.plugin;
  */
 
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
+
 /**
  * Runs Macker against the compiled classes of the project.
  *
- * @goal macker-no-fork
- * @phase compile
- * @requiresDependencyResolution compile
- * @requiresProject
  * @author <a href="http://www.codehaus.org/~wfay/">Wayne Fay</a>
  * @author <a href="http://people.apache.org/~bellingard/">Fabrice
  *         Bellingard</a>
  * @author <a href="http://www.code-cop.org/">Peter Kofler</a>
  */
+@Mojo(
+        name = "macker-no-fork",
+        defaultPhase = LifecyclePhase.COMPILE,
+        requiresDependencyResolution = ResolutionScope.COMPILE,
+        requiresProject = true
+)
 public class MackerNoForkMojo
         extends AbstractMackerMojo
 {

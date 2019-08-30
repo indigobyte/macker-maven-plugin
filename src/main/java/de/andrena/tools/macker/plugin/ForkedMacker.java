@@ -56,6 +56,7 @@ public class ForkedMacker implements Macker
     private String maxmem;
     private List<Artifact> pluginClasspathList = Collections.emptyList();
     private boolean quiet;
+    private int debugPort;
 
     private String createClasspath()
             throws MojoExecutionException
@@ -90,6 +91,10 @@ public class ForkedMacker implements Macker
         if ( maxmem != null )
         {
             jvmArguments.add( "-Xmx" + maxmem );
+        }
+        if (debugPort != 0) {
+            log.debug( "Debug mode enabled. Debug port: " + debugPort );
+            jvmArguments.add("-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=" + debugPort);
         }
         Commandline cl = new Commandline( new JavaShell( jvmArguments ) );
         cl.setExecutable( COMMAND_CLASS );
@@ -202,6 +207,10 @@ public class ForkedMacker implements Macker
     public void setMaxmem(String maxmem)
     {
         this.maxmem = maxmem;
+    }
+
+    public void setDebugPort(int debugPort) {
+        this.debugPort = debugPort;
     }
 
     public void setPluginClasspathList(List<Artifact> pluginClasspathList)

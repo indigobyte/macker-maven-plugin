@@ -85,6 +85,8 @@ public interface Macker
 
     void setMaxmem(String maxmem);
 
+    void setDebugPort(int debugPort);
+
     void setPluginClasspathList(List<Artifact> collectArtifactList);
 
     void setQuiet(boolean quiet);

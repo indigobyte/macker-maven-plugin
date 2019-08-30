@@ -191,6 +191,10 @@ class LinkedMacker implements de.andrena.tools.macker.plugin.Macker
     }
 
     @Override
+    public void setDebugPort(final int debugPort) {
+    }
+
+    @Override
     public void setPluginClasspathList(final List<Artifact> collectArtifactList)
     {
     }

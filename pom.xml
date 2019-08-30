@@ -8,7 +8,7 @@
   </parent>
   <groupId>de.andrena.tools.macker</groupId>
   <artifactId>macker-maven-plugin</artifactId>
-  <version>1.0.4-SNAPSHOT</version>
+  <version>1.0.4-CUSTOM</version>
   <packaging>maven-plugin</packaging>
   <name>Macker Maven Plugin</name>
   <description>This plugin executes the Macker architectural rule checking utility against a project's compiled Java code.</description>
@@ -147,12 +147,12 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>1.5.6</version>
+      <version>3.2.1</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-resources</artifactId>
-      <version>1.0-alpha-7</version>
+      <version>1.1.0</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -182,6 +182,13 @@
       <artifactId>xmlunit</artifactId>
       <version>1.5</version>
       <scope>test</scope>
+    </dependency>
+    <!-- dependencies to annotations -->
+    <dependency>
+      <groupId>org.apache.maven.plugin-tools</groupId>
+      <artifactId>maven-plugin-annotations</artifactId>
+      <version>3.6.0</version>
+      <optional>true</optional> <!-- annotations are not used at runtime because @Retention(value=CLASS), they are needed only to build the plugin -->
     </dependency>
   </dependencies>
   <build>
@@ -220,8 +227,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.3</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>
@@ -245,6 +252,17 @@
             <goals>
               <goal>verify</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>3.6.0</version>
+        <executions>
+          <execution>
+            <id>default-descriptor</id>
+            <phase>process-classes</phase>
           </execution>
         </executions>
       </plugin>

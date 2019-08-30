@@ -61,6 +61,13 @@ public class JavaShellTest
             throws CommandLineException
     {
         Commandline cl = new Commandline();
+        String javaHomePrefix = "JAVA_HOME=";
+        for ( String envVar: cl.getEnvironmentVariables() ) {
+            if ( envVar.startsWith( javaHomePrefix ) ) {
+                cl.setWorkingDirectory( new File( new File( envVar.substring( javaHomePrefix.length() ) ), "bin" ) );
+                break;
+            }
+        }
         cl.setExecutable( "java" );
         cl.createArg().setValue( "-cp" );
         cl.createArg().setValue( classPath );
