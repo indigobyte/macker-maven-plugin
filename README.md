@@ -89,6 +89,7 @@ mvn clean package deploy:deploy-file \
     -Dfile=target/macker-maven-plugin-1.0.4-CUSTOM.jar \
     -Dsources=target/macker-maven-plugin-1.0.4-CUSTOM-sources.jar \
     -Djavadoc=target/macker-maven-plugin-1.0.4-CUSTOM-javadoc.jar \
+    -DpomFile=pom.xml \
     -Durl=file://path-to-mvn-repo-folder
 ``````
 
