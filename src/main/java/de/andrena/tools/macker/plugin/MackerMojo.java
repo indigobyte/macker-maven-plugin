@@ -27,7 +27,6 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 /**
  * Runs Macker against the compiled classes of the project.
  *
- * @requiresProject
  * @author <a href="http://www.codehaus.org/~wfay/">Wayne Fay</a>
  * @author <a href="http://people.apache.org/~bellingard/">Fabrice Bellingard</a>
  * @author <a href="http://www.code-cop.org/">Peter Kofler</a>

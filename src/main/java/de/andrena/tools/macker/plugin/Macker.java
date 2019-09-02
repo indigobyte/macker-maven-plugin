@@ -40,6 +40,7 @@ public interface Macker
     /**
      * Add a class to be checked by Macker.
      * 
+     * @param clazz .class file
      * @throws IOException
      *             if there's a problem reading a file
      * @throws MojoExecutionException
@@ -51,6 +52,7 @@ public interface Macker
     /**
      * Add a rule file to be used by Macker.
      * 
+     * @param rule XML file containing Macker rules
      * @throws IOException
      *             if there's a problem reading a file
      * @throws MojoExecutionException
@@ -75,6 +77,7 @@ public interface Macker
     /**
      * Set the XML report file to be used by Macker.
      * 
+     * @param report report file
      * @throws IOException
      *             if there's a problem with the report file
      */

@@ -57,6 +57,7 @@ public class CommandLineBuilder
     /**
      * Creates a new instance of the builder. Instances of this class should not
      * be reused to create many command lines.
+     * @param name prefix of the temporary file
      * @throws IOException if problems with creating temporary file for storing command line occur
      */
     public CommandLineBuilder(String name)
@@ -116,6 +117,7 @@ public class CommandLineBuilder
      * this method can be used as soon as an instance of this class is created,
      * arguments should be read from the file after a call to {@link #saveArgs} method.
      * @return absolute path to the file with arguments
+     * @throws IOException if something is wrong
      */
     public String getCommandLineFile()
             throws IOException

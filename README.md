@@ -75,3 +75,22 @@ You can also define more complicated, generic Rule-Sets. For example, if you wan
 </macker>
 ```
 This would allow access from package myproject.app.* to myproject.app.internal.*, but not from myproject.web.* to myproject.app.internal.*. Note that myproject.app.subpackage.* could also access myproject.app.internal.*, but the rule could easily be modified to prevent subpackage access to internal packages.
+
+---
+To create new version of maven artifact do this:
+
+Checkout `mvn-repo` branch into some folder
+Run command:
+``````
+mvn clean package deploy:deploy-file \
+    -DgroupId=de.andrena.tools.macker \
+    -DartifactId=macker-maven-plugin \
+    -Dversion=1.0.4-CUSTOM \
+    -Dfile=target/macker-maven-plugin-1.0.4-CUSTOM.jar \
+    -Dsources=target/macker-maven-plugin-1.0.4-CUSTOM-sources.jar \
+    -Djavadoc=target/macker-maven-plugin-1.0.4-CUSTOM-javadoc.jar \
+    -Durl=file://path-to-mvn-repo-folder
+``````
+
+Change version numbers according to the new version.
+Specify path to the folder with `mvn-repo` branch. It must be full path in URL format starting with `file://` protocol.
